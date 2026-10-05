@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blood Strike - Test Panel</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top, #202020, #080808 65%);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.panel {
+    width: 92%;
+    max-width: 390px;
+    background: rgba(18,18,18,.96);
+    border: 1px solid #333;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 0 35px rgba(0,0,0,.7);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #ff3b30;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #aaa;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+}
+
+.dot.active {
+    background: #20e070;
+    box-shadow: 0 0 10px #20e070;
+}
+
+.card {
+    background: #111;
+    border: 1px solid #292929;
+    border-radius: 13px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.card-title {
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 12px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.option strong {
+    font-size: 15px;
+}
+
+.option small {
+    display: block;
+    color: #777;
+    margin-top: 4px;
+}
+
+.switch {
+    width: 52px;
+    height: 28px;
+    border-radius: 30px;
+    background: #333;
+    padding: 3px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.switch::after {
+    content: "";
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: #aaa;
+    border-radius: 50%;
+    transition: .25s;
+}
+
+.switch.on {
+    background: #d92d24;
+}
+
+.switch.on::after {
+    transform: translateX(24px);
+    background: white;
+}
+
+.players {
+    margin-top: 10px;
+}
+
+.player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #181818;
+    border-radius: 9px;
+    padding: 10px;
+    margin-top: 7px;
+    border-left: 3px solid #ff3b30;
+}
+
+.player-name {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.distance {
+    color: #ff6b61;
+    font-size: 12px;
+}
+
+.launch {
+    width: 100%;
+    border: 0;
+    padding: 14px;
+    border-radius: 12px;
+    background: #e63229;
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: .2s;
+}
+
+.launch:hover {
+    background: #ff453b;
+    transform: translateY(-1px);
+}
+
+.launch:active {
+    transform: scale(.98);
+}
+
+.footer {
+    text-align: center;
+    color: #555;
+    font-size: 10px;
+    margin-top: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+    <div class="header">
+        <div class="logo">
+            BLOOD <span>STRIKE</span>
+        </div>
+
+        <div class="status">
+            <div class="dot" id="statusDot"></div>
+            TEST MODE
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">VISUALIZAÇÃO</div>
+
+        <div class="option">
+            <div>
+                <strong>ESP</strong>
+                <small>Box + nome + distância</small>
+            </div>
+
+            <div class="switch" id="espSwitch"
+                 onclick="toggleESP()"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">CONTROLE DE TESTE</div>
+
+        <div class="option">
+            <div>
+                <strong>Bypass</strong>
+                <small>Controle demonstrativo</small>
+            </div>
+
+            <div class="switch" id="bypassSwitch"
+                 onclick="toggleBypass()"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            JOGADORES FICTÍCIOS
+        </div>
+
+        <div class="players" id="players">
+
+            <div class="player">
+                <div class="player-name">PLAYER_ALPHA</div>
+                <div class="distance">12 m</div>
+            </div>
+
+            <div class="player">
+                <div class="player-name">STRIKE_TEST</div>
+                <div class="distance">27 m</div>
+            </div>
+
+            <div class="player">
+                <div class="player-name">TARGET_03</div>
+                <div class="distance">41 m</div>
+            </div>
+
+        </div>
+    </div>
+
+    <button class="launch" onclick="startTest()">
+        INICIAR TESTE
+    </button>
+
+    <div class="footer">
+        Ambiente de demonstração • Sem interação com o jogo
+    </div>
+
+</div>
+
+<script>
+
+let esp = false;
+let bypass = false;
+
+function toggleESP() {
+
+    esp = !esp;
+
+    const button = document.getElementById("espSwitch");
+
+    button.classList.toggle("on", esp);
+
+    updateStatus();
+
+    document.getElementById("players").style.opacity =
+        esp ? "1" : ".35";
+}
+
+function toggleBypass() {
+
+    bypass = !bypass;
+
+    const button =
+        document.getElementById("bypassSwitch");
+
+    button.classList.toggle("on", bypass);
+
+    updateStatus();
+}
+
+function updateStatus() {
+
+    const dot =
+        document.getElementById("statusDot");
+
+    if (esp || bypass) {
+        dot.classList.add("active");
+    } else {
+        dot.classList.remove("active");
+    }
+}
+
+function startTest() {
+
+    alert(
+        "Modo de teste iniciado.\n\n" +
+        "ESP: " + (esp ? "ON" : "OFF") + "\n" +
+        "Bypass demonstrativo: " +
+        (bypass ? "ON" : "OFF")
+    );
+}
+
+</script>
+
+</body>
+</html>
